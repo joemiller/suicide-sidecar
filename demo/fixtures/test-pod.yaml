@@ -1,0 +1,64 @@
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: suicide-secret-test
+  labels:
+    app: suicide-sidecar-test
+data:
+  test: YmxhaAo=
+  bar: YmF6Cg==
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: suicide-sidecar-test
+  labels:
+    app: suicide-sidecar-test
+spec:
+  terminationGracePeriodSeconds: 1
+  containers:
+    # "primary" container
+    - name: primary-app
+      image: ubuntu:16.04
+      command:
+        - sleep
+        - inf
+        # - /bin/bash
+        # - -c
+        # - while true; do date ; ls -la /secretvol/ ; sleep 10 ; done
+      volumeMounts:
+        - mountPath: /secretvol
+          name: secret
+
+    # suicide sidecar
+    - name: suicide-sidecar
+      # TODO: build number not version
+      image: quay.io/getpantheon/suicide-sidecar:shell-version
+      imagePullPolicy: Always
+      args:
+        - /secretvol
+      env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      volumeMounts:
+        - mountPath: /secretvol
+          name: secret
+
+  volumes:
+    - name: secret
+      secret:
+        secretName: suicide-secret-test
+
+# test procedure:
+# 1. kubectl apply
+# 2. wait for stuff to be ready
+# 3. modify the secret

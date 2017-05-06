@@ -1,0 +1,16 @@
+---
+machine:
+  services:
+    - docker
+
+test:
+  override:
+    - make build
+
+deployment:
+  production:
+    branch:
+      - master
+      - release-test
+    commands:
+      - make push
