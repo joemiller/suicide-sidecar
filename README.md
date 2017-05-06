@@ -102,3 +102,5 @@ secret "suicide-secret-test" configured
 pod "suicide-sidecar-test" deleted
 secret "suicide-secret-test" deleted
 ```
+
+TODO: can't build on circle because the gcloud-kubectl image is private.. hrmm. should make this public

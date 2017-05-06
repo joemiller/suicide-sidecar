@@ -55,7 +55,7 @@ main() {
   sleep 3
 
   echo "==> Modifying secret volume"
-  kubectl apply -f ./tests/fixtures/secret-1.yaml
+  kubectl apply -f ./tests/fixtures/secret-update.yaml
 
   echo "==> Tailing logs (expect up to a minute wait for the secretVolume to be updated by Kubernetes)"
   if type -P kube-tail >/dev/null; then
