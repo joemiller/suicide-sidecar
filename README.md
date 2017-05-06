@@ -11,7 +11,7 @@ useful assistant that provides automatic restarts so that the app can reload
 updated Secrets. Automatic restarts on secret updates improves security by
 making it easier to rotate secrets frequently.
 
-This is especially useful for *TLS certificates* since many applications and
+This is especially useful for **TLS certificates** since many applications and
 libraries only support loading certificates at startup. Automated reloading
 of TLS certificates promotes shorter validity periods which increases
 security.
@@ -19,7 +19,7 @@ security.
 How it works
 ------------
 
-The container uses `inotifywait` from the [inotify-tools](TODO) suite to wait for
+The container uses `inotifywait` from the [inotify-tools](https://github.com/rvoicilas/inotify-tools) suite to wait for
 changes to monitored files or directories and then executes `kubectl delete pod $POD_NAME`.
 
 Usage
@@ -27,10 +27,10 @@ Usage
 
 - The container takes at least one command line argument - a path to watch.
   Multiple paths may be specified.
-- The container needs the POD_NAME and NAMESPACE provided as environment variables
+- The container needs the `POD_NAME` and `NAMESPACE` provided as environment variables
   using the downward API.
 - The container must have access to execute `kubectl delete pod` against itself.
-  This is the case in most kubernetes installations.
+  This is the case in most Kubernetes installations.
 
 Add the sidecar container to your Pod spec:
 
@@ -102,7 +102,3 @@ secret "suicide-secret-test" configured
 pod "suicide-sidecar-test" deleted
 secret "suicide-secret-test" deleted
 ```
-
-TODO: license
-TODO: circle.yml
-TODO: makefile
