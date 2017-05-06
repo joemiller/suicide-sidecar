@@ -13,4 +13,5 @@ deployment:
       - master
       - release-test
     commands:
+      - docker login -p "$QUAY_PASSWD" -u "$QUAY_USER" -e "unused@unused" quay.io
       - make push
