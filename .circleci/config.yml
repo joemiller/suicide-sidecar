@@ -1,0 +1,16 @@
+---
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - run: make build
+      - deploy:
+          name: push-image
+          command: |
+            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
+              docker login -p "$QUAY_PASSWD" -u "$QUAY_USER" quay.io
+              make push
+            fi
